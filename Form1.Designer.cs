@@ -46,8 +46,10 @@ namespace Krotoz
             this.menu_Edicion = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_Formato = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_Lexico = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_Fases_Lexico = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_Fases_Sintaxis = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_Fases_Semantico = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSintaxis = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_semantico = new System.Windows.Forms.ToolStripMenuItem();
             this.btnMin = new System.Windows.Forms.Button();
             this.btnMax = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
@@ -139,8 +141,7 @@ namespace Krotoz
             this.menu_Edicion,
             this.menu_Formato,
             this.menu_Lexico,
-            this.menuSintaxis,
-            this.menu_semantico});
+            this.menuSintaxis});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(639, 38);
@@ -206,30 +207,45 @@ namespace Krotoz
             // 
             // menu_Lexico
             // 
+            this.menu_Lexico.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_Fases_Lexico,
+            this.menu_Fases_Sintaxis,
+            this.menu_Fases_Semantico});
             this.menu_Lexico.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F);
             this.menu_Lexico.ForeColor = System.Drawing.Color.RoyalBlue;
             this.menu_Lexico.Name = "menu_Lexico";
-            this.menu_Lexico.Size = new System.Drawing.Size(78, 34);
-            this.menu_Lexico.Text = "Lexico";
-            this.menu_Lexico.Click += new System.EventHandler(this.menu_Lexico_Click);
+            this.menu_Lexico.Size = new System.Drawing.Size(73, 34);
+            this.menu_Lexico.Text = "Fases";
+            // 
+            // menu_Fases_Lexico
+            // 
+            this.menu_Fases_Lexico.Name = "menu_Fases_Lexico";
+            this.menu_Fases_Lexico.Size = new System.Drawing.Size(169, 28);
+            this.menu_Fases_Lexico.Text = "Léxico";
+            this.menu_Fases_Lexico.Click += new System.EventHandler(this.menu_Lexico_Click);
+            // 
+            // menu_Fases_Sintaxis
+            // 
+            this.menu_Fases_Sintaxis.Name = "menu_Fases_Sintaxis";
+            this.menu_Fases_Sintaxis.Size = new System.Drawing.Size(169, 28);
+            this.menu_Fases_Sintaxis.Text = "Sintaxis";
+            this.menu_Fases_Sintaxis.Click += new System.EventHandler(this.menuSintaxis_Click);
+            // 
+            // menu_Fases_Semantico
+            // 
+            this.menu_Fases_Semantico.Name = "menu_Fases_Semantico";
+            this.menu_Fases_Semantico.Size = new System.Drawing.Size(169, 28);
+            this.menu_Fases_Semantico.Text = "Semántico";
+            this.menu_Fases_Semantico.Click += new System.EventHandler(this.menu_semantico_Click);
             // 
             // menuSintaxis
             // 
             this.menuSintaxis.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F);
             this.menuSintaxis.ForeColor = System.Drawing.Color.RoyalBlue;
             this.menuSintaxis.Name = "menuSintaxis";
-            this.menuSintaxis.Size = new System.Drawing.Size(86, 34);
-            this.menuSintaxis.Text = "Sintaxis";
-            this.menuSintaxis.Click += new System.EventHandler(this.menuSintaxis_Click);
-            // 
-            // menu_semantico
-            // 
-            this.menu_semantico.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.menu_semantico.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.menu_semantico.Name = "menu_semantico";
-            this.menu_semantico.Size = new System.Drawing.Size(111, 34);
-            this.menu_semantico.Text = "Semántico";
-            this.menu_semantico.Click += new System.EventHandler(this.menu_semantico_Click);
+            this.menuSintaxis.Size = new System.Drawing.Size(112, 34);
+            this.menuSintaxis.Text = "Ensamblar";
+            this.menuSintaxis.Click += new System.EventHandler(this.menuSintaxis_Click_1);
             // 
             // btnMin
             // 
@@ -548,7 +564,6 @@ namespace Krotoz
         private System.Windows.Forms.ToolStripMenuItem menu_Formato;
         private System.Windows.Forms.ToolStripMenuItem menu_Lexico;
         private System.Windows.Forms.ToolStripMenuItem menuSintaxis;
-        private System.Windows.Forms.ToolStripMenuItem menu_semantico;
         private System.Windows.Forms.Button btnMin;
         private System.Windows.Forms.Button btnMax;
         private System.Windows.Forms.Button btnClose;
@@ -580,6 +595,9 @@ namespace Krotoz
         private System.Windows.Forms.DataGridViewTextBoxColumn tipo;
         private System.Windows.Forms.DataGridViewTextBoxColumn valorIn;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ToolStripMenuItem menu_Fases_Lexico;
+        private System.Windows.Forms.ToolStripMenuItem menu_Fases_Sintaxis;
+        private System.Windows.Forms.ToolStripMenuItem menu_Fases_Semantico;
     }
 }
 

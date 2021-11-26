@@ -13,22 +13,6 @@ namespace Krotoz
 {
     public partial class Form1 : Form
     {
-        struct Lexema
-        {
-            public string palabra { get; set; }
-            public int token { get; set; }
-        };
-        struct ciclo {
-            public Lexema Lexema{get; set;}
-            public int? ID { get; set; }
-        };
-        struct Var
-        {
-            public string nombre { get; set; }
-            public int tipo { get; set; }
-            public object valor { get; set; }
-        };
-        
         string path, title;
         bool saved = false;
         int[,] matriz = {
@@ -117,9 +101,26 @@ namespace Krotoz
         int contadorCiclos = 0;
         int line;
 
+        //struct Ciclo
+        //{
+        //    public Lexema Lexema { get; set; }
+        //    public int? ID { get; set; }
+        //};
+        //struct Lexema
+        //{
+        //    public string palabra { get; set; }
+        //    public int token { get; set; }
+        //};
+        //struct Var
+        //{
+        //    public string nombre { get; set; }
+        //    public int tipo { get; set; }
+        //    public object valor { get; set; }
+        //};
+
         List<Lexema> posfijo = new List<Lexema>();
         Stack<Lexema> pilaPosfijo = new Stack<Lexema>();
-        Stack<ciclo> pilaCiclos = new Stack<ciclo>();
+        Stack<Ciclo> pilaCiclos = new Stack<Ciclo>();
         Dictionary<string, int> reservadas = new Dictionary<string, int>()
         {
             {"if", 100 },
@@ -208,7 +209,7 @@ namespace Krotoz
             {121, "func"}
         };
         List<Tuple<Lexema, int>> tokens = new List<Tuple<Lexema, int>>();
-        
+
         public Form1()
         {
             InitializeComponent();
@@ -243,7 +244,7 @@ namespace Krotoz
 
         bool isOperator(int token)
         {
-            
+
             return (token >= 54 && token <= 65) || (token >= 103 && token <= 105);
         }
 
@@ -295,15 +296,15 @@ namespace Krotoz
                 }
                 else if (state >= 500)
                 {
-                    if(state == 514)
+                    if (state == 514)
                     {
-                        posfijo.Insert(posfijo.Count - 1, new Lexema() { palabra = "call" });
+                        //posfijo.Add(new Lexema() { palabra = "call", token = -121 });
+                        //posfijo.Insert(posfijo.Count - 1, new Lexema() { palabra = "call" });
                     }
                     state = 0;
                 }
                 i++;
             }
-
 
             i = 0;
             while (i < tokens.Count)
@@ -316,14 +317,14 @@ namespace Krotoz
                 }
                 if (token == 67 || token == 69 || token == 71)
                 {
-                    if(pila.Count > 0)
+                    if (pila.Count > 0)
                     {
-                        if(token == 71)
+                        if (token == 71)
                         {
                             var tmp = pila.Pop();
                             if (isReserved(tmp))
                             {
-                                if(pila.Count > 0 && pila.Peek() == 70)
+                                if (pila.Count > 0 && pila.Peek() == 70)
                                 {
                                     pila.Pop();
                                 }
@@ -352,46 +353,6 @@ namespace Krotoz
                                 break;
                         }
                     }
-
-                    //if (pila.Count > 0 && pila.Peek() == token - 1)
-                    //{
-                    //    var tmp = pila.Pop();
-                    //    if (tmp == 70)
-                    //    {
-                    //        if (pila.Count > 0)
-                    //        {
-                    //            if (isReserved(pila.Peek()))
-                    //            {
-                    //                //pila.Pop();
-                    //            }
-                    //            else
-                    //            {
-                    //                //Esperaba }
-                    //                dgvErrores.Rows.Add(222, errores[222], tokens[i].Item2);
-
-                    //            }
-                    //        }
-                    //    }
-                        
-                    //}
-                    //else
-                    //{
-                    //    switch (token)
-                    //    {
-                    //        case 67:
-                    //            //Esperaba (
-                    //            dgvErrores.Rows.Add(210, errores[210], tokens[i].Item2);
-                    //            break;
-                    //        case 69:
-                    //            //Esperaba [
-                    //            dgvErrores.Rows.Add(223, errores[223], tokens[i].Item2);
-                    //            break;
-                    //        case 71:
-                    //            //Esperaba {
-                    //            dgvErrores.Rows.Add(212, errores[212], tokens[i].Item2);
-                    //            break;
-                    //    }
-                    //}
 
                 }
                 if (isReserved(token))
@@ -470,14 +431,12 @@ namespace Krotoz
             }
 
         }
-
         private void menu_archivo_nuevo_Click(object sender, EventArgs e)
         {
             frmFileName frm = new frmFileName();
             frm.crear = nuevoArchivo;
             frm.ShowDialog();
         }
-
         private void abrirArchivo()
         {
             //Mostrar Dialog
@@ -494,7 +453,6 @@ namespace Krotoz
                 saved = true;
             }
         }
-
         private void guardarArchivo()
         {
             save.FileName = $"{title}";
@@ -534,23 +492,19 @@ namespace Krotoz
             //mostrar el titulo en la barra del editor
             lblFileName.Text = title;
         }
-
         private void menu_archivo_abrir_Click(object sender, EventArgs e)
         {
             abrirArchivo();
         }
-
         private void menu_archivo_guardar_Click(object sender, EventArgs e)
         {
             guardarArchivo();
         }
-
         private void menu_archivo_guardarComo_Click(object sender, EventArgs e)
         {
             saved = false;
             guardarArchivo();
         }
-
         private void menu_Lexico_Click(object sender, EventArgs e)
         {
             int i = 0, state = 0, col = -1;
@@ -588,7 +542,7 @@ namespace Krotoz
                     col = 25;
 
                 var repeat = state == 0;
-                
+
                 state = matriz[state, col];
 
                 i++;
@@ -631,7 +585,7 @@ namespace Krotoz
 
                         dgvLexico.Rows.Add(palabra, state, line);
                         var lex = new Lexema() { palabra = palabra, token = state };
-                        tokens.Add(new Tuple<Lexema,int>(lex, line));
+                        tokens.Add(new Tuple<Lexema, int>(lex, line));
                         semantico(lex);
 
                     }
@@ -668,21 +622,23 @@ namespace Krotoz
 
         void semantico(Lexema lexema)
         {
+            
             var token = lexema.token;
-            if((token >= 114 && token <= 116) || token == 121)
+            if ((token >= 114 && token <= 116) || token == 121)
             {
                 declaration = true;
                 banderaTipo = token;
+                _var = new Var();
             }
             else if (declaration)
             {
                 _var.tipo = banderaTipo;
-                if(token == 77)
+                if (token == 77)
                 {
                     declaration = false;
                     setValue = false;
                     //Agregar a variables
-                    if(vars.Any(e => e.nombre == _var.nombre))
+                    if (vars.Any(e => e.nombre == _var.nombre))
                     {
                         //variable duplicada
                         dgvErrores.Rows.Add(230, errores[230] + ": " + _var.nombre, line);
@@ -690,23 +646,23 @@ namespace Krotoz
                     }
                     else
                     {
-                        if(_var.valor == null)
+                        if (_var.valor == null)
                         {
                             _var.valor = banderaTipo == 116 ? (object)"''" : 0;
-                        } 
+                        }
                         vars.Add(_var);
                     }
                     _var = new Var();
                 }
-                else if(token == 50)
+                else if (token == 50)
                 {
                     _var.nombre = lexema.palabra;
                 }
-                else if(token == 65)
+                else if (token == 65)
                 {
                     setValue = true;
                 }
-                else if(token == 70 && banderaTipo == 121)
+                else if (token == 70 && banderaTipo == 121)
                 {
                     declaration = false;
                     setValue = false;
@@ -721,12 +677,13 @@ namespace Krotoz
                     {
                         _var.valor = 0;
                         vars.Add(_var);
-                        posfijo.Add(new Lexema() { palabra = "func" });
                         posfijo.Add(new Lexema() { palabra = _var.nombre, token = 121 });
+                        //posfijo.Add(new Lexema() { palabra = "in" + _var.nombre, token = 121 });
+                        pilaCiclos.Push(new Ciclo() { Lexema = new Lexema() { palabra = _var.nombre, token = 121 } });
                     }
                     _var = new Var();
                 }
-                else if(token == 75)
+                else if (token == 75)
                 {
                     setValue = false;
                     //Agregar a variables
@@ -771,9 +728,8 @@ namespace Krotoz
                     posfijo.Add(lexema);
                     if (lexema.token == 50)
                     {
-
                         _var = vars.Where(e => e.nombre == posfijo.Last().palabra).FirstOrDefault();
-                        if (_var.nombre == null)
+                        if ( _var.nombre == null)
                         {
                             //Variable no declarada
                             dgvErrores.Rows.Add(229, errores[229] + ": " + posfijo.Last().palabra, line);
@@ -810,7 +766,7 @@ namespace Krotoz
                         pilaPosfijo.Push(lexema);
                     }
 
-                    if(token == 65)
+                    if (token == 65)
                     {
                         changeVariableValue = true;
                     }
@@ -821,19 +777,19 @@ namespace Krotoz
                     if (isCicle(token))
                     {
                         contadorCiclos++;
-                        var cicle = new ciclo() { Lexema = lexema, ID = contadorCiclos };
+                        var cicle = new Ciclo() { Lexema = lexema, ID = contadorCiclos };
                         pilaCiclos.Push(cicle);
                         posfijo.Add(new Lexema() { palabra = cicle.Lexema.palabra + "#" + cicle.ID, token = token });
                     }
                     else if (token == 123)
                     {
-                        var cicle = new ciclo() { Lexema = lexema };
+                        var cicle = new Ciclo() { Lexema = lexema };
                         pilaCiclos.Push(cicle);
                         posfijo.Add(lexema);
                     }
                     else if ((token == 101 || token == 102) && posfijo.Last().token == 100)
                     {
-                        var cicle = new ciclo() { Lexema = lexema, ID = int.Parse(posfijo.Last().palabra.Split('#').Last()) };
+                        var cicle = new Ciclo() { Lexema = lexema, ID = int.Parse(posfijo.Last().palabra.Split('#').Last()) };
                         pilaCiclos.Push(cicle);
                         var id = posfijo.Last().palabra.Split('#').Last();
                         posfijo.Add(new Lexema() { palabra = cicle.Lexema.palabra + "#" + id, token = cicle.Lexema.token });
@@ -863,7 +819,7 @@ namespace Krotoz
                         var cicle = pilaCiclos.Pop();
                         var lex = "out" + cicle.Lexema.palabra;
                         lex += cicle.ID == null ? string.Empty : ("#" + cicle.ID);
-                        posfijo.Add(new Lexema() { palabra = lex, token = cicle.Lexema.token });
+                        posfijo.Add(new Lexema() { palabra = lex, token = -cicle.Lexema.token });
 
                         if (cicle.Lexema.token == 100 || cicle.Lexema.token == 102)
                         {
@@ -889,7 +845,6 @@ namespace Krotoz
                 }
             }
         }
-
         private void menu_semantico_Click(object sender, EventArgs e)
         {
             pilaPosfijo.Clear();
@@ -914,6 +869,18 @@ namespace Krotoz
             }
 
             MessageBox.Show(post);
+        }
+
+        private void menuSintaxis_Click_1(object sender, EventArgs e)
+        {
+            if(dgvErrores.Rows.Count <= 1)
+            {
+                Ensamblador ensamblador = new Ensamblador(posfijo, vars);
+            }
+            else
+            {
+                MessageBox.Show("No puedo, existen errores en el código :c");
+            }
         }
 
         public void nuevoArchivo(string titulo)

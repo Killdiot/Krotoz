@@ -101,23 +101,6 @@ namespace Krotoz
         int contadorCiclos = 0;
         int line;
 
-        //struct Ciclo
-        //{
-        //    public Lexema Lexema { get; set; }
-        //    public int? ID { get; set; }
-        //};
-        //struct Lexema
-        //{
-        //    public string palabra { get; set; }
-        //    public int token { get; set; }
-        //};
-        //struct Var
-        //{
-        //    public string nombre { get; set; }
-        //    public int tipo { get; set; }
-        //    public object valor { get; set; }
-        //};
-
         List<Lexema> posfijo = new List<Lexema>();
         Stack<Lexema> pilaPosfijo = new Stack<Lexema>();
         Stack<Ciclo> pilaCiclos = new Stack<Ciclo>();
@@ -237,26 +220,7 @@ namespace Krotoz
             WindowState = FormWindowState.Minimized;
         }
 
-        private bool isReserved(int token)
-        {
-            return (token >= 100 && token < 103) || (token >= 106 && token < 110) || (token >= 112 && token < 114) || token == 123;
-        }
-
-        bool isOperator(int token)
-        {
-
-            return (token >= 54 && token <= 65) || (token >= 103 && token <= 105);
-        }
-
-        bool isOperand(int token)
-        {
-            return (token >= 50 && token <= 53) || token == 72;
-        }
-
-        bool isCicle(int token)
-        {
-            return (token == 100 || token == 106 || token == 112 || token == 113);
-        }
+        
 
         bool isDeclaredVariable(string id)
         {
@@ -310,6 +274,7 @@ namespace Krotoz
             while (i < tokens.Count)
             {
                 int token = tokens[i].Item1.token;
+                var lex = tokens[i].Item1;
 
                 if (token == 66 || token == 68 || token == 70)
                 {
@@ -322,7 +287,7 @@ namespace Krotoz
                         if (token == 71)
                         {
                             var tmp = pila.Pop();
-                            if (isReserved(tmp))
+                            if (lex.isReserved())
                             {
                                 if (pila.Count > 0 && pila.Peek() == 70)
                                 {
@@ -355,7 +320,7 @@ namespace Krotoz
                     }
 
                 }
-                if (isReserved(token))
+                if (lex.isReserved())
                 {
                     int tmp;
                     switch (token)
@@ -575,7 +540,7 @@ namespace Krotoz
                         //else if (c != '\'')
                         //    i--;
 
-                        if ((c != ' ' && (repeat || isOperator(state))) || c == '\'')
+                        if ((c != ' ' && (repeat || (new Lexema() { token = state}).isOperator())) || c == '\'')
                             palabra += c;
                         else
                             i--;
@@ -723,7 +688,7 @@ namespace Krotoz
                     }
                 }
 
-                if (isOperand(token))
+                if (lexema.isOperand())
                 {
                     posfijo.Add(lexema);
                     if (lexema.token == 50)
@@ -740,13 +705,13 @@ namespace Krotoz
                 {
                     posfijo.Add(lexema);
                 }
-                else if (isOperator(token))
+                else if (lexema.isOperator())
                 {
                     if (pilaPosfijo.Count == 0)
                     {
                         pilaPosfijo.Push(lexema);
                     }
-                    else if (isOperator(pilaPosfijo.Peek().token))
+                    else if (pilaPosfijo.Peek().isOperator())
                     {
                         if (preferenciaOperadores[pilaPosfijo.Peek().token] < preferenciaOperadores[token])
                         {
@@ -754,7 +719,7 @@ namespace Krotoz
                         }
                         else
                         {
-                            while (pilaPosfijo.Count > 0 && isOperator(pilaPosfijo.Peek().token) && preferenciaOperadores[pilaPosfijo.Peek().token] >= preferenciaOperadores[token])
+                            while (pilaPosfijo.Count > 0 && pilaPosfijo.Peek().isOperator() && preferenciaOperadores[pilaPosfijo.Peek().token] >= preferenciaOperadores[token])
                             {
                                 posfijo.Add(pilaPosfijo.Pop());
                             }
@@ -771,10 +736,10 @@ namespace Krotoz
                         changeVariableValue = true;
                     }
                 }
-                else if (isReserved(token))
+                else if (lexema.isReserved())
                 {
                     //ciclo
-                    if (isCicle(token))
+                    if (lexema.isCicle())
                     {
                         contadorCiclos++;
                         var cicle = new Ciclo() { Lexema = lexema, ID = contadorCiclos };
